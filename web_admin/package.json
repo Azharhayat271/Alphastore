@@ -8,6 +8,8 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.11.5",
     "axios": "^0.26.0",
+    "cloudinary-react": "^1.8.1",
+    "firebase": "^10.7.1",
     "jquery": "^3.6.0",
     "moment": "^2.29.2",
     "react": "^17.0.2",

@@ -4,7 +4,7 @@ const Product = require("../models/Product");
 const {verifyTokenAndAdmin} = require("./verifyToken");
 
 //Create Product
-router.post("/",verifyTokenAndAdmin, async (req,res)=>{
+router.post("/", async (req,res)=>{
 	const newProduct = new Product(req.body);
 
 	try{
@@ -17,7 +17,7 @@ router.post("/",verifyTokenAndAdmin, async (req,res)=>{
 });
 
 // Update Product
-router.put("/:id",verifyTokenAndAdmin,async (req,res)=>{
+router.put("/:id",async (req,res)=>{
 	
 	try{
 		const updatedProduct = await Product.findByIdAndUpdate(req.params.id,{
@@ -135,7 +135,7 @@ router.get("/find/:id", async (req,res)=>{
 
 
 // Delete Product
-router.delete("/:id",verifyTokenAndAdmin,async (req,res)=>{
+router.delete("/:id",async (req,res)=>{
 
 	try{
 		const deletedProduct = await Product.findByIdAndDelete(req.params.id);
