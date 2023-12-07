@@ -13,35 +13,16 @@ import NotFound from "./components/pages/NotFound";
 import AuthRoute from "./AuthRoute";
 import PrivateRouter from "./PrivateRouter";
 import Toast from "./components/LoadingError/Toast";
-import './App.css';
+import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import Setting from "./components/pages/setting/index";
 import LogoSetting from "./components/pages/setting/logo";
-import ColorSetting from './components/pages/setting/color';
-import firebase from 'firebase/app';
-import 'firebase/storage';
-import { initializeApp } from 'firebase/app';
-import { getAnalytics } from "firebase/analytics";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBsmxbOGyWVAr0C-j8YGVuM9F-7v8_R6zQ",
-  authDomain: "mystore-11870.firebaseapp.com",
-  projectId: "mystore-11870",
-  storageBucket: "mystore-11870.appspot.com",
-  messagingSenderId: "197350777962",
-  appId: "1:197350777962:web:5ec1ec2aaf26580c5b9613",
-  measurementId: "G-D9DYSTLZM1"
-};
-
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-
+import ColorSetting from "./components/pages/setting/color";
 
 function App() {
   return (
     <>
-      <Toast/>
+      <Toast />
       <Router>
         <Switch>
           <PrivateRouter path="/" component={Dashboard} exact />
@@ -58,8 +39,6 @@ function App() {
           <PrivateRouter path="/storesetting" component={Setting} />
           <PrivateRouter path="/logosetting" component={LogoSetting} />
           <PrivateRouter path="/colorsetting" component={ColorSetting} />
-
-
 
           <PrivateRouter path="*" component={NotFound} />
         </Switch>

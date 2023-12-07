@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -9,19 +9,23 @@ const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const stripeRoute = require("./routes/stripe");
-const Colorsetting =require("./routes/color");
-const Logo =require("./routes/logo");
+const Colorsetting = require("./routes/color");
+const Logo = require("./routes/logo");
 
 // Read value from .env file
 dotenv.config();
 
 //MongoDB Connection
-mongoose.connect(process.env.DB_URL_DEVELOPMENT)
-.then(()=>{
-	console.log("DB Connection Successfully")
-}).catch((err)=>{
-	console.log(err)
-})
+mongoose
+  .connect(process.env.DB_URL_DEVELOPMENT, {
+    family: 4,
+  })
+  .then(() => {
+    console.log("DB Connection Successfully");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 //Allow to call from different source
 app.use(cors());
@@ -29,19 +33,18 @@ app.use(cors());
 app.use(express.json());
 
 //Use routes
-app.use("/api/auth",authRoute);
-app.use("/api/users",userRoute);
-app.use("/api/products",productRoute);
-app.use("/api/carts",cartRoute);
-app.use("/api/orders",orderRoute);
-app.use("/api/checkout",stripeRoute);
-app.use("/api/color",Colorsetting);
-app.use("/api/logo",Logo);
-
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
+app.use("/api/products", productRoute);
+app.use("/api/carts", cartRoute);
+app.use("/api/orders", orderRoute);
+app.use("/api/checkout", stripeRoute);
+app.use("/api/color", Colorsetting);
+app.use("/api/logo", Logo);
 
 //Read PORT from .env file OR Default set 5002
 const API_PORT = process.env.API_PORT || 5005;
 
-app.listen(API_PORT,()=>{
-	console.log(`Backend Server is running on port ${API_PORT}`)
-})
+app.listen(API_PORT, () => {
+  console.log(`Backend Server is running on port ${API_PORT}`);
+});
