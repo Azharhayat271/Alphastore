@@ -45,6 +45,7 @@ app.use("/api/logo", Logo);
 //Read PORT from .env file OR Default set 5002
 const API_PORT = process.env.API_PORT || 5005;
 
-app.listen(API_PORT, () => {
+const server = app.listen(API_PORT, () => {
   console.log(`Backend Server is running on port ${API_PORT}`);
 });
+module.exports = server;
