@@ -1,43 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  removeFromCart,
-  increaseProductQty,
-  decreaseProductQty
-} from '../redux/actions/cartActions';
-import { getProductStock } from '../api'; // Replace with your actual API function
+import { removeFromCart, increaseProductQty, decreaseProductQty } from '../redux/actions/cartActions';
 
 const CartProduct = ({ detail }) => {
-  const { id, image, name, price, qty } = detail;
+  const { id, image, name, price, stock, qty } = detail;
   const dispatch = useDispatch();
-  const [stock, setStock] = useState(null);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Fetch the product stock when the component mounts
-    getProductStock(id)
-      .then((response) => setStock(response.stock))
-      .catch((error) => setError('Error fetching stock.'));
-  }, [id]);
-
-  const removeItemFromCart = () => {
+  const removeItemFromCart = (id) => {
     dispatch(removeFromCart(id));
   };
 
-  const cartIncreaseItem = () => {
-    if (stock === null) {
-      setError('Fetching stock...');
-      return;
-    }
-
-    if (stock > 0) {
-      dispatch(increaseProductQty(id));
-    } else {
-      setError('Product is out of stock.');
-    }
+  const cartIncreaseItem = (id) => {
+    dispatch(increaseProductQty(id));
   };
 
-  const cartDecreaseItem = () => {
+  const cartDecreaseItem = (id) => {
     dispatch(decreaseProductQty(id));
   };
 
@@ -48,33 +25,21 @@ const CartProduct = ({ detail }) => {
         <div className="cart-item-info">
           <h5 className="cart-item-name">{name}</h5>
           <span className="cart-item-price">${price}</span>
-          <button
-            className="cart-item-remove-btn"
-            title="Remove"
-            onClick={removeItemFromCart}
-          >
+          {stock <= 0 && <p className="cart-item-error">Product is out of stock</p>}
+          <button className="cart-item-remove-btn" title="Remove" onClick={() => { removeItemFromCart(id) }}>
             <i className="fa fa-trash" aria-hidden="true"></i>
           </button>
         </div>
         <div>
-          <button
-            className="cart-item-increase-btn"
-            onClick={cartIncreaseItem}
-          >
+          <button className="cart-item-increase-btn" onClick={() => cartIncreaseItem(id)}>
             <i className="fas fa-chevron-up" />
           </button>
           <span className="cart-item-amount">{qty}</span>
-          <button
-            className={`cart-item-decrease-btn${
-              qty === 1 ? ' disabled' : ''
-            }`}
-            onClick={cartDecreaseItem}
-          >
+          <button className={'cart-item-decrease-btn' + ((qty === 1) ? ' disabled' : '')} onClick={() => cartDecreaseItem(id)}>
             <i className="fas fa-chevron-down" />
           </button>
         </div>
       </article>
-      {error && <p className="error-message">{error}</p>}
     </>
   );
 };

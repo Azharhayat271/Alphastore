@@ -152,4 +152,21 @@ router.delete("/:id",async (req,res)=>{
 	}
 });
 
+//api to return the stock og the product by id
+router.get("/stock/:id", async (req,res)=>{
+	try{
+		const productData = await Product.findById(req.params.id);
+		
+		if(productData){
+			res.status(200).json({success:1,message:"",data:productData.stock});
+		}else{
+			res.status(200).json({success:0,message:"No Data Found!"})
+		}
+		
+	}catch(err){
+		res.status(500).json({status:0,message:err.message})
+	}
+});
+
+
 module.exports = router;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "antd";
+import { Table }  from "antd";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link } from "react-router-dom";
@@ -127,7 +127,7 @@ const ProductTable = () => {
       title: "Promote",
       key: "promote",
       render: (text, record) => (
-        <button onClick={() => handlePromoteClick(record._id, record.title)}>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => handlePromoteClick(record._id, record.title)}>
           Promote
         </button>
       ),

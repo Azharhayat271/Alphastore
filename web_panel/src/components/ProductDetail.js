@@ -2,15 +2,23 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/actions/cartActions';
 import QRCode from 'qrcode.react';
+import {ToastObjects} from "../util/toastObject";
+import { toast } from "react-toastify";
+
 
 const Products = (props) => {
     const productDetails = props.details.data;
-    const { image, title, price, description } = productDetails;
+    const { image, title, price, description, stock } = productDetails;
     const [itemQty, setItemQty] = useState(1);
     const dispatch = useDispatch();
 
     const addToCartHandle = (product) => {
-        dispatch(addToCart(product, itemQty));
+        if (stock > 0) {
+            dispatch(addToCart(product, itemQty));
+        } else {
+            // Display an error message or handle out-of-stock scenario
+            toast.error("Product is Out of Stock", ToastObjects);
+        }
     }
 
     const handleItemQty = (e) => {
@@ -36,16 +44,9 @@ const Products = (props) => {
                             </p>
                             <p className="item-qty">
                                 <select onChange={handleItemQty} defaultValue={itemQty}>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
+                                    {[...Array(10)].map((_, index) => (
+                                        <option key={index + 1} value={index + 1}>{index + 1}</option>
+                                    ))}
                                 </select>
                             </p>
                             <div className="qr-code-container">
