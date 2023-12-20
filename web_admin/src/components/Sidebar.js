@@ -49,7 +49,7 @@ const Sidebar = () => {
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/marketing">
-              <i className="fa fa-rectangle-ad menu-icon" />
+              <i class="fa fa-list menu-icon"></i>
               <span className="menu-title">Marketing</span>
             </Link>
           </li>

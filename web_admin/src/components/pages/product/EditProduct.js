@@ -136,20 +136,7 @@ const EditProduct = ({match}) => {
 				                                 </div>
 				                              </div>				                              
 				                           </div>
-				                           <div className="row">
-				                              <div className="col-md-6">
-				                                 <div className="form-group row">
-				                                    <label className="col-sm-3 col-form-label">Size</label>
-				                                    <div className="col-sm-9">
-				                                       <input type="text" className="form-control form-control-lg"
-					                                        name="size" 
-					                                        onChange={handleChange}
-					                                        value={formState.values.size || ''}
-					                                        />					                                        
-				                                    </div>
-				                                 </div>
-				                              </div>				                              
-				                           </div>
+				                          
 				                           <div className="row">
 				                              <div className="col-md-6">
 				                                 <div className="form-group row">
@@ -179,19 +166,7 @@ const EditProduct = ({match}) => {
 				                              </div>				                              
 				                           </div>
 				                           
-				                           <div className="row">
-				                              <div className="col-md-6">
-				                                 <div className="form-group row">
-				                                    <label className="col-sm-3 col-form-label">Category</label>
-				                                    <div className="col-sm-9">
-				                                       <select className="form-control" name="category" multiple>
-				                                          <option value="man">Man</option>
-				                                          <option value="woman">Woman</option>
-				                                       </select>
-				                                    </div>
-				                                 </div>
-				                              </div>				                              
-				                           </div>
+				                        
 				                           <div className="row">
 				                              <div className="col-md-6">
 				                                 <div className="form-group row">

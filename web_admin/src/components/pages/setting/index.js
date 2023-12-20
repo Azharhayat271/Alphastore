@@ -30,21 +30,7 @@ const StoreSettings = () => {
                   </div>
                 </div>
 
-                {/* Example Card 2: Payment Options */}
-                <div className="col-lg-4 grid-margin stretch-card">
-                  <div className="card">
-                    <div className="card-body">
-                      <h4 className="card-title">Color Customization</h4>
-                      <p className="card-description">
-                        Customize the colors for your Store
-                      </p>
-                      {/* Additional content or actions specific to Payment Options */}
-                      <Link to="/colorsetting" className="btn btn-outline-primary btn-fw">
-                        Customize Colors
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+             
 
 
               </div>

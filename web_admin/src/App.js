@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Setting from "./components/pages/setting/index";
 import LogoSetting from "./components/pages/setting/logo";
 import ColorSetting from "./components/pages/setting/color";
+import Marketing from "./components/pages/marketing/index";
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
           <PrivateRouter path="/storesetting" component={Setting} />
           <PrivateRouter path="/logosetting" component={LogoSetting} />
           <PrivateRouter path="/colorsetting" component={ColorSetting} />
+          <PrivateRouter path="/marketing" component={Marketing} />
+
 
           <PrivateRouter path="*" component={NotFound} />
         </Switch>

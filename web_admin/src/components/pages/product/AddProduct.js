@@ -5,11 +5,15 @@ import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import Footer from '../../Footer';
 import {createProduct} from '../../../redux/actions/ProductActions'; 
+import { useHistory } from 'react-router-dom';
+
 
 const AddProduct = () => {
 
   const [submitted, setSubmitted] = useState(false);  
   const dispatch = useDispatch();
+  const history = useHistory();
+
 
   const userRegister = useSelector((state) => state.userRegister);
   const { error, loading, register_status } = userRegister;
@@ -41,6 +45,8 @@ const AddProduct = () => {
             dispatch(createProduct(formState.values));
             setFormState({values:{}});
             setSubmitted(false);
+			history.push('/products');
+
         }
     }
 
@@ -111,20 +117,7 @@ const AddProduct = () => {
 				                                 </div>
 				                              </div>				                              
 				                           </div>
-				                           <div className="row">
-				                              <div className="col-md-6">
-				                                 <div className="form-group row">
-				                                    <label className="col-sm-3 col-form-label">Size</label>
-				                                    <div className="col-sm-9">
-				                                       <input type="text" className="form-control form-control-lg"
-					                                        name="size" 
-					                                        onChange={handleChange}
-					                                        value={formState.values.size || ''}
-					                                        />					                                        
-				                                    </div>
-				                                 </div>
-				                              </div>				                              
-				                           </div>
+				        
 				                           <div className="row">
 				                              <div className="col-md-6">
 				                                 <div className="form-group row">
@@ -153,20 +146,7 @@ const AddProduct = () => {
 				                                 </div>
 				                              </div>				                              
 				                           </div>
-				                           
-				                           <div className="row">
-				                              <div className="col-md-6">
-				                                 <div className="form-group row">
-				                                    <label className="col-sm-3 col-form-label">Category</label>
-				                                    <div className="col-sm-9">
-				                                       <select className="form-control" name="category" multiple>
-				                                          <option value="man">Man</option>
-				                                          <option value="woman">Woman</option>
-				                                       </select>
-				                                    </div>
-				                                 </div>
-				                              </div>				                              
-				                           </div>
+				                     
 				                           <div className="row">
 				                              <div className="col-md-6">
 				                                 <div className="form-group row">
