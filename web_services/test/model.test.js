@@ -9,18 +9,45 @@ const ColorModel = require("../models/coloesetting");
 const LogoModel = require("../models/logo");
 
 describe("UserSchema", () => {
+  // Test 1: Basic validation of required fields
   test("should have the required fields", () => {
     const userData = {
       name: "John Doe",
       email: "johndoe@example.com",
       password: "password123",
     };
-
     const user = new User(userData);
     const validationError = user.validateSync();
-
     expect(validationError).toBeFalsy();
   });
+
+  // Test 2: Unique email constraint
+  test("should enforce a unique email constraint", async () => {
+    // Create a user with a unique email
+    const uniqueUser = new User({
+      name: "Jane Doe",
+      email: "janedoe@example.com",
+      password: "password456",
+    });
+    await uniqueUser.save();
+
+    // Attempt to create another user with the same email
+    const duplicateUser = new User({
+      name: "Another User",
+      email: "janedoe@example.com", // Same email as the previous user
+      password: "password789",
+    });
+
+    try {
+      await duplicateUser.save();
+      // The above line should not be reached; an error should be thrown
+    } catch (error) {
+      expect(error.name).toEqual("MongoError");
+      expect(error.code).toEqual(11000); // MongoDB duplicate key error code
+    }
+  });
+
+ 
 });
 
 describe("ProductSchema", () => {
