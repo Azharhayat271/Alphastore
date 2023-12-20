@@ -28,6 +28,8 @@ mongoose
   });
 
 //Allow to call from different source
+//alphastore-8s3q.vercel.app
+
 app.use(cors());
 // parse requests of content-type - application/json, Read JSON data from request
 app.use(express.json());
