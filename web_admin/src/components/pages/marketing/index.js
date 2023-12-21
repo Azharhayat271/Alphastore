@@ -127,7 +127,7 @@ const ProductTable = () => {
       title: "Promote",
       key: "promote",
       render: (text, record) => (
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => handlePromoteClick(record._id, record.title)}>
+        <button  onClick={() => handlePromoteClick(record._id, record.title)}>
           Promote
         </button>
       ),
