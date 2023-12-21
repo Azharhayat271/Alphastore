@@ -72,6 +72,7 @@ const Products = () => {
 	return(
 			<>
 			    <section className="products">
+			        <Filters priceFilter={priceFilter} changePrice={changePrice} changeSearch={changeSearch}/>
 			        {
 			        	(Object.keys(products).length === 0) ? 
 						<Loading/> :
