@@ -12,6 +12,8 @@ const stripeRoute = require("./routes/stripe");
 const Colorsetting = require("./routes/color");
 const Logo = require("./routes/logo");
 const couponRoutes = require("./routes/coupon");
+const returnRoutes = require('./routes/return');
+
 
 // Read value from .env file
 dotenv.config();
@@ -45,6 +47,8 @@ app.use("/api/checkout", stripeRoute);
 app.use("/api/color", Colorsetting);
 app.use("/api/logo", Logo);
 app.use("/api", couponRoutes);
+app.use('/api/return', returnRoutes);
+
 
 //Read PORT from .env file OR Default set 5002
 const API_PORT = process.env.API_PORT || 5005;

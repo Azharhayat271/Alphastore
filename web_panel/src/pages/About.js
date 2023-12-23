@@ -1,38 +1,142 @@
-import React from 'react';
-import NavBar from '../components/Navbar';
-import PageHeading from '../components/PageHeading';
-import ProductDetail from '../components/ProductDetail';
-import Sidebar from '../components/Sidebar';
-import Cart from '../components/Cart';
+import React, { useEffect, useState } from "react";
+import { Table, Button } from "antd";
+import moment from "moment";
+import NavBar from "../components/Navbar";
 
-const ProductDetailPage = () => {
-	return(
-		<>
-		 	<NavBar/>	
-		 	<PageHeading title="Home / About"/>
-		 	<section className="section section-center">
-		        <div className="title">
-		          <span />
-		          <h2>our history</h2>
-		          <span />
-		        </div>
-		        <p className="about-text">
-		          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat
-		          accusantium sapiente tempora sed dolore esse deserunt eaque excepturi,
-		          delectus error accusamus vel eligendi, omnis beatae. Quisquam, dicta.
-		          Eos quod quisquam esse recusandae vitae neque dolore, obcaecati incidunt
-		          sequi blanditiis est exercitationem molestiae delectus saepe odio
-		          eligendi modi porro eaque in libero minus unde sapiente consectetur
-		          architecto. Ullam rerum, nemo iste ex, eaque perspiciatis nisi, eum
-		          totam velit saepe sed quos similique amet. Ex, voluptate accusamus
-		          nesciunt totam vitae esse iste.
-		        </p>
-		    </section>
-		 	<Sidebar/>
-		 	<Cart/>
-		</>
-		)
-}
+const UserProfile = () => {
+  const [userId, setUserId] = useState(null);
+  const [userOrders, setUserOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    // Fetch user data from local storage
+    const userDataString = localStorage.getItem("userPanelInfo");
 
-export default ProductDetailPage;
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      // Extract user ID from the data
+      const firstUserId = userData?.data?.[0]?._id;
+
+      setUserId(firstUserId);
+
+      // Fetch user orders
+      if (firstUserId) {
+        fetchUserOrders(firstUserId);
+      }
+    }
+  }, []);
+
+  const fetchUserOrders = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5002/api/orders/user/${userId}`
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        setUserOrders(data.data);
+      } else {
+        console.error("Failed to fetch user orders");
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user orders", error);
+      setLoading(false);
+    }
+  };
+
+  const isOrderDeliveredLastWeek = (deliveryDate) => {
+    const deliveryMoment = moment(deliveryDate);
+    const oneWeekAgo = moment().subtract(7, "days");
+    return deliveryMoment.isAfter(oneWeekAgo);
+  };
+
+  const handleReturnButtonClick = (orderId, deliveryDate) => {
+    // Check if the order is delivered within the last week
+    if (isOrderDeliveredLastWeek(deliveryDate)) {
+      window.location.href = `/return-details/${orderId}`;
+    } else {
+      console.log(
+        `Return button is disabled for order ${orderId} as it is not delivered within the last week.`
+      );
+    }
+  };
+
+  const columns = [
+    {
+      title: "Order ID",
+      dataIndex: "_id",
+      key: "_id",
+    },
+    {
+      title: "Product Name",
+      dataIndex: "orderItems",
+      key: "name",
+      render: (orderItems) => orderItems[0].name,
+    },
+    {
+      title: "Image",
+      dataIndex: "orderItems",
+      key: "image",
+      render: (orderItems) => (
+        <img
+          src={orderItems[0].image}
+          alt="Product"
+          style={{ maxWidth: "50px" }}
+        />
+      ),
+    },
+    {
+      title: "Price",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+    },
+    {
+      title: "Status",
+      dataIndex: "isDelivered",
+      key: "isDelivered",
+      render: (isDelivered) => (isDelivered ? "Delivered" : "Pending"),
+    },
+    {
+      title: "Delivery Date",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt) => moment(createdAt).format("YYYY-MM-DD HH:mm:ss"),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <Button
+          type="primary"
+          onClick={() => handleReturnButtonClick(record._id, record.createdAt)}
+          disabled={
+            !record.isDelivered || !isOrderDeliveredLastWeek(record.createdAt)
+          }
+        >
+          Return
+        </Button>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <NavBar />
+
+      {userId && (
+        <div className="container" style={{ marginTop: "50px" }}>
+          <Table
+            columns={columns}
+            dataSource={userOrders}
+            loading={loading}
+            rowKey="_id"
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default UserProfile;

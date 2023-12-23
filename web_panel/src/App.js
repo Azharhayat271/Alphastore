@@ -12,6 +12,7 @@ import PrivateRouter from "./PrivateRouter";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Toast from "./components/Toast";
 import 'react-toastify/dist/ReactToastify.css';
+import  Return from "./pages/Returnform";
 
 function App() {
   return (
@@ -28,6 +29,9 @@ function App() {
           <Route path="/login" component={Login}/>
           <Route path="/register" component={RegisterPage}/>
           <Route path="/forgot-password" component={ForgotPassword}/>
+          <Route path="/return-details/:orderId" component={Return}/>
+
+
           <Route path="*" component={NotFound} />
         </Switch>
       </Router>  

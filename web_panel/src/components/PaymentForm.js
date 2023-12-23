@@ -125,6 +125,7 @@ const PaymentForm = () => {
         }else{
           if(orderItems && shippingAddress && paymentMethod ){
             dispatch(createOrder({orderItems, shippingAddress, paymentMethod, user, itemsPrice, shippingPrice, taxPrice, totalPrice}));
+            debugger
               history.push('/');
           }  
         }

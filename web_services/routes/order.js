@@ -131,4 +131,22 @@ router.delete("/:id",verifyTokenAndAdmin,async (req,res)=>{
 	}
 });
 
+// api to get the order on the base of user id
+router.get("/user/:id", async (req,res)=>{
+	
+	try{
+		const orderData = await Order.find({user:req.params.id});
+		
+		if(orderData){
+			res.status(200).json({success:1,message:"",data:orderData});
+		}else{
+			res.status(200).json({success:0,message:"No Data Found!"})
+		}
+		
+	}catch(err){
+		res.status(500).json({status:0,message:err.message})
+	}
+});
+
+
 module.exports = router;
