@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 //fuction to handle handleClick
 const handleClick = () => {
-  localStorage.removeItem('userInfo');
-  window.location.href = '/login';
-}
+  localStorage.removeItem("userInfo");
+  window.location.href = "/login";
+};
 
 const Sidebar = () => {
   return (
@@ -53,9 +53,14 @@ const Sidebar = () => {
               <span className="menu-title">Marketing</span>
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/coupons">
+              <i class="fa fa-list menu-icon"></i>
+              <span className="menu-title">Coupon</span>
+            </Link>
+          </li>
           <li className="nav-item" onClick={handleClick}>
             <Link className="nav-link">
-
               <i className="fa fa-sign-out menu-icon" onClick={handleClick} />
               <span className="menu-title">Logout</span>
             </Link>
@@ -63,8 +68,7 @@ const Sidebar = () => {
         </ul>
       </nav>
     </>
-  )
-}
-
+  );
+};
 
 export default Sidebar;
