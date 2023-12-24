@@ -24,8 +24,6 @@ const CartTotal = () => {
       const data = await response.json();
       if (response.ok) {
         setDiscountPercentage(data.discountPercentage);
-        console.log("Coupon Applied:", data.code);
-        console.log("Discount Percentage:", data.discountPercentage);
       } else {
         setDiscountPercentage(0);
         setError("Coupon not found");
