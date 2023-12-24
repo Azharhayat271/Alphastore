@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, Table } from "antd";
+import NavBar from "../components/Navbar";
 
 const ReturnDetails = () => {
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
-    // Fetch order details using orderId when the component mounts
     const fetchOrderDetails = async () => {
       try {
         const response = await fetch(
@@ -29,7 +29,6 @@ const ReturnDetails = () => {
   }, [orderId]);
 
   const handleReturnSubmit = async (values) => {
-    // Make API request to submit return details
     try {
       const response = await fetch("http://localhost:5002/api/return", {
         method: "POST",
@@ -38,7 +37,10 @@ const ReturnDetails = () => {
         },
         body: JSON.stringify({
           orderId,
-          returnDetails: values,
+          returnDetails: {
+            orderItems: orderDetails.orderItems,
+            additionalData: values, // You can add any other data you need
+          },
         }),
       });
 
@@ -56,43 +58,78 @@ const ReturnDetails = () => {
     }
   };
 
+  const columns = [
+    {
+      title: "Product Image",
+      dataIndex: "image",
+      key: "image",
+      render: (text, record) => (
+        <img
+          src={text}
+          alt="Product"
+          style={{ maxWidth: "50px", marginRight: "10px" }}
+        />
+      ),
+    },
+    {
+      title: "Product Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Total Price",
+      dataIndex: "price",
+      key: "price",
+    },
+    {
+      title: "Quantity",
+      dataIndex: "qty",
+      key: "qty",
+    },
+  ];
+
   return (
     <div>
-      <h2>Return Details for Order</h2>
-      {orderDetails && (
-        <Form
-          name="returnForm"
-          onFinish={handleReturnSubmit}
-          initialValues={{ reason: "", comments: "" }}
-        >
-          <Form.Item>
-            <img
-              src={orderDetails.orderItems[0].image}
-              alt="Product"
-              style={{ maxWidth: "100px" }}
-            />
-          </Form.Item>
-          <Form.Item label="Product Name">
-            {orderDetails.orderItems[0].name}
-          </Form.Item>
-          <Form.Item label="Total Price">{orderDetails.totalPrice}</Form.Item>
-          <Form.Item
-            label="Return Reason"
-            name="reason"
-            rules={[{ required: true }]}
+      <NavBar />
+      <div className="container">
+        <h2 style={{ marginBottom: "20px" }}>Return Details for Order</h2>
+        {orderDetails && (
+          <Form
+            name="returnForm"
+            onFinish={handleReturnSubmit}
+            initialValues={{ reason: "", comments: "" }}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item label="Additional Comments" name="comments">
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit Return
-            </Button>
-          </Form.Item>
-        </Form>
-      )}
+            <Table
+              dataSource={orderDetails.orderItems}
+              columns={columns}
+              rowKey="productId"
+              pagination={false}
+              style={{ marginBottom: "20px" }}
+            />
+            <div style={{ marginBottom: "20px" }}>
+              <Form.Item
+                label="Reasons"
+                name="reason"
+                rules={[
+                  { required: true, message: "Please provide a return reason" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+              <Form.Item label="Comment" name="comments">
+                <Input.TextArea />
+              </Form.Item>
+            </div>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit Return
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
+      </div>
     </div>
   );
 };

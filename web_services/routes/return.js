@@ -5,14 +5,15 @@ const Return = require('./../models/return');
 // Route to submit return details
 router.post('/', async (req, res) => {
   try {
-    let { orderId, reason, comments, returnDetails } = req.body;
-    reason = returnDetails.reason;
-    comments = returnDetails.comments;
-    console.log('orderId', reason, comments, returnDetails);
+    const { orderId, returnDetails } = req.body;
+    const { orderItems } = returnDetails.orderItems;
+    const comments=returnDetails.additionalData.comments;
+    const reason=returnDetails.additionalData.reason;
+
     // You can perform validation or additional logic here
 
     // Save the return details to the database
-    const newReturn = new Return({ orderId, reason, comments });
+    const newReturn = new Return({ orderId, reason, comments, orderItems });
     await newReturn.save();
 
     res.json({ success: true, message: 'Return details submitted successfully' });
