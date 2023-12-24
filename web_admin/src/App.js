@@ -20,6 +20,7 @@ import LogoSetting from "./components/pages/setting/logo";
 import ColorSetting from "./components/pages/setting/color";
 import Marketing from "./components/pages/marketing/index";
 import Coupon from "./components/pages/coupon/coupon";
+import Return from "./components/pages/return/index";
 
 function App() {
   return (
@@ -43,6 +44,8 @@ function App() {
           <PrivateRouter path="/colorsetting" component={ColorSetting} />
           <PrivateRouter path="/marketing" component={Marketing} />
           <PrivateRouter path="/coupons" component={Coupon} />
+          <PrivateRouter path="/return" component={Return} />
+
 
           <PrivateRouter path="*" component={NotFound} />
         </Switch>

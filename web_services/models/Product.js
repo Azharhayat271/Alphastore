@@ -10,6 +10,8 @@ const ProductSchema = new mongoose.Schema(
     color: { type: String },
     price: { type: SchemaTypes.Double },
     stock: { type: Number },
+    sale : {type: Boolean,default: false},
+    salePrice: { type: SchemaTypes.Double , default: 10},
   },
   { timestamps: true }
 );

@@ -42,6 +42,12 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to="/return">
+              <i className="fa fa-retweet menu-icon" />
+              <span className="menu-title">Product Return</span>
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link className="nav-link" to="/storesetting">
               <i className="fa fa-cogs menu-icon" />
               <span className="menu-title">Store Setting</span>
@@ -55,7 +61,7 @@ const Sidebar = () => {
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/coupons">
-              <i class="fa fa-list menu-icon"></i>
+              <i class="fa fa-codepen menu-icon"></i>
               <span className="menu-title">Coupon</span>
             </Link>
           </li>
