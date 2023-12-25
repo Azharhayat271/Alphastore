@@ -18,6 +18,8 @@ const PaymentForm = () => {
   const [btnDisable, setBtnDisable] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
   const [showCardPayment, setShowCardPayment] = useState(false);
+  const [installmentPlan, setInstallmentPlan] = useState(false); // Default to 3 months
+
   const userInfo = useSelector((state) => state.userPanelLogin.userInfo.data);
   const user = userInfo[0]._id;
 
@@ -138,6 +140,24 @@ const PaymentForm = () => {
         setSubmitted(false);
         setBtnDisable(false);
       }
+    } else if (paymentMethod === "installments") {
+      // Additional logic for installment payments
+      if (orderItems && shippingAddress && paymentMethod) {
+        dispatch(
+          createOrder({
+            orderItems,
+            shippingAddress,
+            paymentMethod,
+            user,
+            itemsPrice,
+            shippingPrice,
+            taxPrice,
+            totalPrice,
+            installmentPlan,
+          })
+        );
+        history.push("/");
+      }
     } else {
       if (orderItems && shippingAddress && paymentMethod) {
         dispatch(
@@ -158,11 +178,20 @@ const PaymentForm = () => {
   };
 
   const changePaymentMethod = (e) => {
-    if (e.target.value === "card") {
+    const selectedPaymentMethod = e.target.value;
+
+    if (selectedPaymentMethod === "card") {
       setShowCardPayment(true);
       setPaymentMethod("Card");
+      setInstallmentPlan(false);
+
+    } else if (selectedPaymentMethod === "installments") {
+      setShowCardPayment(false);
+      setPaymentMethod("Installments");
     } else {
       setShowCardPayment(false);
+      setInstallmentPlan(false);
+
       setPaymentMethod("Cash on Delivery");
     }
   };
@@ -215,6 +244,9 @@ const PaymentForm = () => {
                     >
                       <option value="cod">Cash on Delivery</option>
                       <option value="card">Pay with Card</option>
+                      <option value="installments">
+                        Pay with Installments
+                      </option>
                     </select>
                   </div>
                   {showCardPayment ? (
@@ -223,10 +255,7 @@ const PaymentForm = () => {
                         <CardElement options={cardElementOptions} />
                       </div>
                     </div>
-                  ) : (
-                    ""
-                  )}
-
+                  ) : null}
                   <div className="d-flex justify-content-center mt-3 login_container">
                     <button className="btn login_btn" disabled={btnDisable}>
                       {submitted ? (
