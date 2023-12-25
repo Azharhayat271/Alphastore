@@ -6,13 +6,11 @@ const Return = require('./../models/return');
 router.post('/', async (req, res) => {
   try {
     const { orderId, returnDetails } = req.body;
-    const { orderItems } = returnDetails;
+    const  orderItems  = returnDetails.orderItems;
     const { comments, reason } = returnDetails.additionalData;
+    debugger
+    console.log(orderItems);
 
-    // Validate input data (you can add more specific validation logic)
-    if (!orderId || !orderItems || !comments || !reason) {
-      return res.status(400).json({ success: false, message: 'Invalid input data' });
-    }
 
     // Save the return details to the database
     const newReturn = new Return({ orderId, reason, comments, orderItems });

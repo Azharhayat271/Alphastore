@@ -1,20 +1,4 @@
-const mongoose = require('mongoose');
-
-const productSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  image: String,
-  totalPrice: {
-    type: Number,
-    required: true,
-  },
-  qty:{
-    type:Number
-  },
-  // Add more fields as needed
-});
+const mongoose = require("mongoose");
 
 const returnSchema = new mongoose.Schema({
   orderId: {
@@ -26,10 +10,18 @@ const returnSchema = new mongoose.Schema({
     required: true,
   },
   comments: String,
-  orderItems: [productSchema], // Array of products
-  // Add more fields as needed
+  orderItems: [
+    {
+      name: String,
+      qty: Number,
+      price: Number, 
+      image: String,
+      product: String,
+      
+    },
+  ],
 });
 
-const Return = mongoose.model('Return', returnSchema);
+const Return = mongoose.model("Return", returnSchema);
 
 module.exports = Return;

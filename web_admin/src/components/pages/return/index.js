@@ -3,10 +3,13 @@ import { Table } from "antd";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link } from "react-router-dom";
+import { Button } from "antd";
 
 const ReturnList = () => {
   const [returnData, setReturnData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedReturn, setSelectedReturn] = useState(null);
+
 
   useEffect(() => {
     // Fetch return data from the API
@@ -46,14 +49,30 @@ const ReturnList = () => {
       dataIndex: "orderItems",
       key: "orderItems",
       render: (orderItems) => (
-        <ul>
-          {orderItems.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
+        // Modify this according to how you want to render the order items
+        <span>{orderItems.map((item) => item.name).join(", ")}</span>
+      ),
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, record) => (
+        <Button onClick={() => handleViewDetails(record._id)}>View More</Button>
       ),
     },
   ];
+  const handleViewDetails = async (returnId) => {
+    try {
+      const response = await fetch(`http://localhost:5002/api/return/${returnId}`);
+      const details = await response.json();
+      // Handle the details as needed, e.g., show a modal with the details
+      console.log("Return Details:", details);
+      setSelectedReturn(details);
+    } catch (error) {
+      console.error("Error fetching return details:", error);
+    }
+  };
 
   return (
     <>

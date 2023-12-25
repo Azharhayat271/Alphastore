@@ -14,9 +14,14 @@ const generateInvoice = (order, res) => {
 
   // Pipe the PDF document output to the response
   doc.pipe(res);
+  // add space betten logo and text
 
   // Add content to the PDF document
   doc.fontSize(20).text("Invoice", { underline: true, align: "center" });
+  doc.moveDown(2);
+
+  doc.image("logo.png", 50, 50, { width: 100 });
+  doc.fontSize(14).text("Alpha Store", { align: "center" });
   doc.text("--------------------------------------------");
 
   doc.fontSize(14).text(`Order ID: ${order._id}`);
@@ -39,6 +44,9 @@ const generateInvoice = (order, res) => {
 
   doc.text("--------------------------------------------");
   doc.fontSize(16).text(`Total: $${order.totalPrice}`);
+
+  doc.text("--------------------------------------------");
+  doc.fontSize(16).text(`Thanks for Shoping and the Alpha Store!`, { underline: true, align: "center" });
 
   // Finalize the PDF document
   doc.end();
