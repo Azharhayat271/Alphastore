@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import  Return from "./pages/Returnform";
 import Installments from "./components/installments";
 import InstallmentPlan from "./components/installmentplans";
+import Payments from './components/payment';
 
 function App() {
   return (
@@ -34,6 +35,8 @@ function App() {
           <Route path="/return-details/:orderId" component={Return}/>
           <Route path="/installments" component={Installments}/>
           <Route path="/order-details/:orderId" component={InstallmentPlan}/>
+          <Route path="/payments" component={Payments}/>
+
 
 
 
