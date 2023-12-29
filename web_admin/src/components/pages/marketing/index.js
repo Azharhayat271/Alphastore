@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Table }  from "antd";
+import { Table , message }  from "antd";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import {ToastObjects} from '../../../redux/actions/toastObject'; 
 
 const ProductTable = () => {
   const [products, setProducts] = useState([]);
@@ -40,13 +42,14 @@ const ProductTable = () => {
       });
   }, []);
 
-  const handlePromoteClick = async (productId, productName) => {
+  const handlePromoteClick = async (productId, Image,  productName, Description, Color, Price) => {
     try {
       // Fetch emails from users
       const response = await fetch("http://localhost:5002/api/users/emails");
       const userData = await response.json();
 
       if (userData.success === 1) {
+        
         const userEmails = userData.data;
 
         // Send emails about the details of the products
@@ -58,16 +61,20 @@ const ProductTable = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              productDetails: { id: productId, name: productName },
+              productDetails: { id: productId, Pic: Image,  name: productName ,decription: Description, price: Price, color: Color },
               userEmails,
             }),
+            
           }
         );
+       
 
         const sendEmailData = await sendEmailResponse.json();
 
         if (sendEmailData.success === 1) {
-          console.log("Emails sent successfully!");
+          message.success("Marketing Emails Send Sucessfully");
+
+
         } else {
           console.error("Failed to send emails");
         }
@@ -126,8 +133,8 @@ const ProductTable = () => {
     {
       title: "Promote",
       key: "promote",
-      render: (text, record) => (
-        <button  onClick={() => handlePromoteClick(record._id, record.title)}>
+      render: (text, record, ) => (
+        <button  onClick={() => handlePromoteClick(record._id, record.image, record.title, record.description, record.color , record.price)}>
           Promote
         </button>
       ),

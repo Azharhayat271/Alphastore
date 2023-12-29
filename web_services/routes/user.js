@@ -1,5 +1,6 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
+const fs = require("fs");
 
 const router = express.Router();
 const User = require("../models/User");
@@ -135,6 +136,7 @@ router.get("/emails", async (req, res) => {
 router.post("/sendemail", async (req, res) => {
   try {
     const { productDetails, userEmails } = req.body;
+    const ProductImage = productDetails.Pic;
 
     // Create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -145,15 +147,43 @@ router.post("/sendemail", async (req, res) => {
       },
     });
 
+    // Reading the image file as a base64-encoded string
+    const imageAttachment = {
+      filename: "image.png",
+      content: ProductImage,
+      encoding: "base64",
+      cid: "image",
+    };
+
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"Alpha Store" <azharhayat271@gmail.com>', // sender address
-      to: userEmails.join(", "), // list of receivers
-      subject: "Product Promotion", // Subject line
-      text: `Check out our latest products: ${JSON.stringify(productDetails)}`, // plain text body
-      html: `<p>Check out our latest products: ${JSON.stringify(
-        productDetails
-      )}</p>`, // html body
+      from: '"Alpha Store" <azharhayat271@gmail.com>',
+      to: userEmails.join(", "),
+      subject: "Product Promotion",
+      html: `
+        <p>
+          Check out our latest products:
+          <br>
+          <img src=${productDetails.Pic} alt="Product Image" style="width: 300px; height: auto;">
+        </p>
+        <table border="1">
+        <tr>
+          <th>Product Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Color</th>
+          <!-- Add more table headers as needed -->
+        </tr>
+        <tr>
+          <td>${productDetails.name}</td>
+          <td>${productDetails.decription}</td>
+          <td>${productDetails.price}</td>
+          <td>${productDetails.color}</td>
+          <!-- Add more table cells as needed -->
+        </tr>
+      </table>
+      `,
+      attachments: [imageAttachment],
     });
 
     console.log("Message sent: %s", info.messageId);
