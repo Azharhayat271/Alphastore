@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Table, Space, message } from "antd";
+import { Form, Input, Button, Table, Space, Card } from "antd";
 import moment from "moment";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
@@ -158,42 +158,56 @@ const AdminPage = () => {
         <Sidebar />
 
         <div className="content-wrapper">
-          <Form form={form} onFinish={handleFormSubmit}>
-            <h2>{editCouponId ? "Edit Coupon" : "Create Coupon"}</h2>
-            <Form.Item
-              label="Code"
-              name="code"
-              rules={[{ required: true, message: "Please enter the code" }]}
+          <Card className="mb-5">
+            <Form
+              name="basic"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              style={{ maxWidth: 600 }}
+              initialValues={{ remember: true }}
+              autoComplete="off"
+              form={form}
+              onFinish={handleFormSubmit}
             >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Discount Percentage"
-              name="discountPercentage"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter the discount percentage",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Expiry Date"
-              name="expiryDate"
-              rules={[
-                { required: true, message: "Please enter the expiry date" },
-                { validator: validateDateFormat },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Button className="mb-5" type="primary" htmlType="submit">
-              {editCouponId ? "Update Coupon" : "Create Coupon"}
-            </Button>
-          </Form>
-
+              <h2 className="mb-4">
+                {editCouponId ? "Edit Coupon" : "Create Coupon"}
+              </h2>
+              <Form.Item
+                label="Code"
+                name="code"
+                rules={[{ required: true, message: "Please enter the code" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Discount Percentage"
+                name="discountPercentage"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the discount percentage",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Expiry Date"
+                name="expiryDate"
+                rules={[
+                  { required: true, message: "Please enter the expiry date" },
+                  { validator: validateDateFormat },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Button type="primary" htmlType="submit">
+                  {editCouponId ? "Update Coupon" : "Create Coupon"}
+                </Button>
+              </Form.Item>
+            </Form>
+          </Card>
           <h2 className="mb-3">Coupons</h2>
           <Table dataSource={coupons} columns={columns} rowKey="_id" />
         </div>

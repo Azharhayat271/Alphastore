@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { showCart } from "../redux/actions/cartActions";
-import { Input, Button, Typography, message } from "antd";
+import { Input, Button, Typography } from "antd";
 
 const { Text } = Typography;
 
@@ -36,10 +36,10 @@ const CartTotal = () => {
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-  const cartTotal = cartItems
+  const cartTotal1 = cartItems
     .reduce((a, i) => a + i.qty * i.price, 0)
     .toFixed(2);
-  const totalAfterDiscount = cartTotal - (cartTotal * discountPercentage) / 100;
+  const cartTotal = cartTotal1 - (cartTotal1 * discountPercentage) / 100;
 
   const dispatch = useDispatch();
   const closeCart = () => {
@@ -49,9 +49,7 @@ const CartTotal = () => {
   return (
     <>
       <footer>
-        <h3 className="cart-total text-slanted">
-          total : ${totalAfterDiscount}
-        </h3>
+        <h3 className="cart-total text-slanted">total : ${cartTotal}</h3>
         <div>
           <Input.Search
             value={couponCode}

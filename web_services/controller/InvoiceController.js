@@ -46,7 +46,10 @@ const generateInvoice = (order, res) => {
   doc.fontSize(16).text(`Total: $${order.totalPrice}`);
 
   doc.text("--------------------------------------------");
-  doc.fontSize(16).text(`Thanks for Shoping and the Alpha Store!`, { underline: true, align: "center" });
+  doc.fontSize(16).text(`Thanks for Shoping and the Alpha Store!`, {
+    underline: true,
+    align: "center",
+  });
 
   // Finalize the PDF document
   doc.end();
