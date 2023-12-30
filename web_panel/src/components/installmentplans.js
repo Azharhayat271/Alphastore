@@ -2,11 +2,27 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Form, Input, Button, message, Table, Radio } from "antd";
 import NavBar from "../components/Navbar";
+import { useHistory } from "react-router-dom";
 
 const ReturnDetails = () => {
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
-  const user = "658358412a7cea3d5613f676";
+  // const user = "658358412a7cea3d5613f676";
+  const [user, setUserId] = useState(null);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    // Fetch user data from local storage
+    const userDataString = localStorage.getItem("userPanelInfo");
+
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      const firstUserId = userData?.data?.[0]?._id;
+
+      setUserId(firstUserId);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -68,6 +84,7 @@ const ReturnDetails = () => {
 
       if (result.success) {
         message.success("Installment plan created successfully");
+        history.push("/payments");
         // You may want to redirect or perform other actions after success
       } else {
         message.error("Failed to create installment plan");

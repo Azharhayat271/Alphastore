@@ -103,5 +103,28 @@ const setInstallmentAsPaid = async (req, res) => {
   }
 };
 
+//get api which will return code on the basis get the user and check if user already has installmentor not
+const getInstallmentByUserId = async (req, res) => {
+  try {
+    const userId = req.params.id;
 
-module.exports = { createInstallment, getInstallmentById ,setInstallmentAsPaid};
+    // Retrieve the installment plan from the database
+    const installment = await Installment.findOne({
+      user: userId,
+    });
+
+    if (!installment) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Installment plan not found" });
+    }
+
+    res.json({ success: true, installment });
+  } catch (error) {
+    console.error("Error fetching installment plan by ID", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+
+module.exports = { createInstallment, getInstallmentById ,setInstallmentAsPaid, getInstallmentByUserId};
