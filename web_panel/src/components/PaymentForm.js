@@ -19,6 +19,8 @@ const PaymentForm = () => {
   const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
   const [showCardPayment, setShowCardPayment] = useState(false);
   const [installmentPlan, setInstallmentPlan] = useState(false); // Default to 3 months
+  //fetch cart total from local storage
+  const discountPercentage = localStorage.getItem("discountPercentage");
 
   const userInfo = useSelector((state) => state.userPanelLogin.userInfo.data);
   const user = userInfo[0]._id;
@@ -56,6 +58,7 @@ const PaymentForm = () => {
       image,
       price,
       product: id,
+     
     });
   });
 
@@ -63,13 +66,8 @@ const PaymentForm = () => {
     .reduce((a, i) => a + i.qty * i.price, 0)
     .toFixed(2);
   const shippingPrice = itemsPrice > 100 ? 0 : 10;
-  const taxPrice = (0.15 * itemsPrice).toFixed(2);
-  const totalPrice = (
-    (parseFloat(itemsPrice) +
-      parseFloat(shippingPrice) +
-      parseFloat(taxPrice)) *
-    100
-  ).toFixed();
+  const taxPrice = (0.05 * itemsPrice).toFixed(2);
+  const totalPrice = itemsPrice - (itemsPrice * discountPercentage) / 100 + shippingPrice + Number(taxPrice);
 
   //Redirect to shipping page if address is not filled
   if (cartItems.length === 0) {

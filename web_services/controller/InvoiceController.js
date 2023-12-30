@@ -41,8 +41,13 @@ const generateInvoice = (order, res) => {
     doc.fontSize(14).text(`Price: ${items.price}`);
     doc.fontSize(14).text(`Quantity: ${items.qty}`);
   });
+  doc.fontSize(14).text(`Tax: ${order.taxPrice}`);
+  doc.fontSize(14).text(`Shipping Price: ${order.shippingPrice}`);
+
 
   doc.text("--------------------------------------------");
+  doc.fontSize(20).text("After Discount", { underline: true, align: "center" });
+
   doc.fontSize(16).text(`Total: $${order.totalPrice}`);
 
   doc.text("--------------------------------------------");

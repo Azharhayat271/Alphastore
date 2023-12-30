@@ -24,6 +24,10 @@ const CartTotal = () => {
       const data = await response.json();
       if (response.ok) {
         setDiscountPercentage(data.discountPercentage);
+        // save perscent age to local storage
+        localStorage.setItem("discountPercentage", data.discountPercentage);
+
+
       } else {
         setDiscountPercentage(0);
         setError("Coupon not found");
@@ -40,6 +44,8 @@ const CartTotal = () => {
     .reduce((a, i) => a + i.qty * i.price, 0)
     .toFixed(2);
   const cartTotal = cartTotal1 - (cartTotal1 * discountPercentage) / 100;
+  //save carttotal to local storage
+
 
   const dispatch = useDispatch();
   const closeCart = () => {
