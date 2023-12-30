@@ -74,16 +74,15 @@ const getInstallmentById = async (req, res) => {
 };
 
 // api that will set the installment as paid
+
 const setInstallmentAsPaid = async (req, res) => {
   try {
     const installmentId = req.body.installmentId;
 
-    // Retrieve the installment plan from the database on the basis of installments.id
+    // Retrieve the installment plan from the database based on installments.id
     const installment = await Installment.findOne({
       installments: { $elemMatch: { _id: installmentId } },
     });
-    
-  
 
     if (!installment) {
       return res
@@ -91,18 +90,28 @@ const setInstallmentAsPaid = async (req, res) => {
         .json({ success: false, message: "Installment plan not found" });
     }
 
-    // Set the first installment as paid
-    installment.installments[0].isPaid = true;
+    // Find the index of the first unpaid installment
+    const indexOfUnpaidInstallment = installment.installments.findIndex(
+      (installment) => !installment.isPaid
+    );
+
+    // If all installments are paid, delete the record
+    if (indexOfUnpaidInstallment === -1) {
+      await Installment.findByIdAndDelete(installment._id);
+      return res.json({ success: true, message: "Installment plan deleted" });
+    }
+
+    // Mark the next unpaid installment as paid
+    installment.installments[indexOfUnpaidInstallment].isPaid = true;
 
     await installment.save();
 
     res.json({ success: true, message: "Installment plan updated" });
   } catch (error) {
-    console.error("Error fetching installment plan by ID", error);
+    console.error("Error updating/installment plan by ID", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-
 //get api which will return code on the basis get the user and check if user already has installmentor not
 const getInstallmentByUserId = async (req, res) => {
   try {
@@ -126,5 +135,9 @@ const getInstallmentByUserId = async (req, res) => {
   }
 };
 
-
-module.exports = { createInstallment, getInstallmentById ,setInstallmentAsPaid, getInstallmentByUserId};
+module.exports = {
+  createInstallment,
+  getInstallmentById,
+  setInstallmentAsPaid,
+  getInstallmentByUserId,
+};
