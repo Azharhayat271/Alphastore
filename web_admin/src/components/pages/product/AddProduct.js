@@ -164,6 +164,7 @@ const AddProduct = () => {
 				                                 </div>
 				                              </div>				                              
 				                           </div>
+										 
 				                            <div className="text-center">
 				                            	<button type="submit" className="btn btn-primary me-2">Submit</button>
                     							<Link to="/products"><button className="btn btn-light">Cancel</button></Link>
