@@ -135,9 +135,42 @@ const getInstallmentByUserId = async (req, res) => {
   }
 };
 
+const getTotalPendingPayments = async (req, res) => {
+  try {
+    // Retrieve all installment plans from the database
+    const installments = await Installment.find({});
+
+    if (!installments || installments.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No installment plans found" });
+    }
+
+    // Calculate total pending payments for all users
+    const totalPendingPayments = installments.reduce((total, installment) => {
+      installment.installments.forEach((payment) => {
+        if (!payment.isPaid) {
+          total.push({
+            userId: installment.user,
+            paymentId: payment._id, // You may want to include a unique identifier for each payment
+            amount: parseInt(payment.amount),
+          });
+        }
+      });
+      return total;
+    }, []);
+
+    res.json({ success: true, totalPendingPayments });
+  } catch (error) {
+    console.error("Error fetching installment plans", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createInstallment,
   getInstallmentById,
   setInstallmentAsPaid,
   getInstallmentByUserId,
+  getTotalPendingPayments,
 };

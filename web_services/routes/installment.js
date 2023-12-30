@@ -5,6 +5,7 @@ const { createInstallment } = require('./../controller/installment');
 const { getInstallmentById } = require('./../controller/installment');
 const { setInstallmentAsPaid } = require('./../controller/installment');
 const { getInstallmentByUserId } = require('./../controller/installment');
+const { getTotalPendingPayments } = require('./../controller/installment');
 
 // Your other routes...
 
@@ -13,6 +14,8 @@ router.post('/create', createInstallment);
 router.get('/get/:id', getInstallmentById);
 router.post('/setPaid', setInstallmentAsPaid);
 router.get('/getByUserId/:id', getInstallmentByUserId);
+router.get('/getTotalPendingPayments', getTotalPendingPayments);
+
 
 
 

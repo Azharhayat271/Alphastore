@@ -48,6 +48,13 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to="/installments">
+              <i className="fa fa-money menu-icon" />
+              <span className="menu-title">Pending Payments</span>
+            </Link>
+          </li>
+
+          <li className="nav-item">
             <Link className="nav-link" to="/storesetting">
               <i className="fa fa-cogs menu-icon" />
               <span className="menu-title">Store Setting</span>
