@@ -59,7 +59,7 @@ const ReturnDetails = () => {
       }));
 
       // Exclude the last two digits from totalPrice
-      const truncatedTotalPrice = Math.trunc(orderDetails.totalPrice / 100);
+      const truncatedTotalPrice = orderDetails.totalPrice ;
 
       const requestData = {
         products,

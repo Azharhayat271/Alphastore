@@ -55,4 +55,42 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// route to get on the basis of orderId
+router.get('/find/:orderId', async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+
+    // Retrieve return details by ID from the database
+    const returnDetails = await Return.findOne({ orderId });
+
+    if (!returnDetails) {
+      return res.status(404).json({ success: false, message: 'Return details not found' });
+    }
+
+    res.json({ success: true, return: returnDetails });
+  } catch (error) {
+    console.error('Error getting return details by ID', error);
+    res.status(500).json({ success: false, message: 'Failed to get return details' });
+  }
+});
+
+// route to delete return details by orderId
+router.delete('/delete/:orderId', async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+
+    // Delete return details by ID from the database
+    const returnDetails = await Return.findOneAndDelete({ orderId });
+
+    if (!returnDetails) {
+      return res.status(404).json({ success: false, message: 'Return details not found' });
+    }
+
+    res.json({ success: true, message: 'Return details deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting return details by ID', error);
+    res.status(500).json({ success: false, message: 'Failed to delete return details' });
+  }
+});
+
 module.exports = router;

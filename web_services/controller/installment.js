@@ -5,6 +5,7 @@ const createInstallment = async (req, res) => {
   try {
     const { products, paymentMethod, totalPrice, installmentPlan, user } =
       req.body;
+      
 
     // Assuming you have a user associated with the installment
     const userId = user; // Adjust this based on your authentication setup

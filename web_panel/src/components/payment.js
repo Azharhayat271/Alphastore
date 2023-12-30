@@ -95,6 +95,7 @@ const InstallmentList = () => {
         console.log("Payment successful!");
         // Set the installment as paid
         await setInstallmentAsPaid(selectedInstallment._id);
+        window.location.reload();
         // You can update the UI or take additional actions upon successful payment
       } else {
         console.error("Payment failed:", response.statusText);

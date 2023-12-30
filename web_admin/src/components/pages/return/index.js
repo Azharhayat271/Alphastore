@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "antd";
+import { Table, Modal, Button } from "antd";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link } from "react-router-dom";
-import { Button } from "antd";
+import { message } from "antd";
 
 const ReturnList = () => {
   const [returnData, setReturnData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedReturn, setSelectedReturn] = useState(null);
-
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    // Fetch return data from the API
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:5002/api/return/all");
@@ -49,7 +48,6 @@ const ReturnList = () => {
       dataIndex: "orderItems",
       key: "orderItems",
       render: (orderItems) => (
-        // Modify this according to how you want to render the order items
         <span>{orderItems.map((item) => item.name).join(", ")}</span>
       ),
     },
@@ -58,20 +56,55 @@ const ReturnList = () => {
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
-        <Button onClick={() => handleViewDetails(record._id)}>View More</Button>
+        <>
+          <Button onClick={() => handleViewDetails(record)}>View More</Button>
+          <Button onClick={() => handleDelete(record)}>
+            Delete
+          </Button>
+        </>
       ),
     },
   ];
-  const handleViewDetails = async (returnId) => {
+
+  const handleDelete = async (record) => {
     try {
-      const response = await fetch(`http://localhost:5002/api/return/${returnId}`);
-      const details = await response.json();
-      // Handle the details as needed, e.g., show a modal with the details
-      console.log("Return Details:", details);
-      setSelectedReturn(details);
+      // Assuming you have an endpoint for deleting a return record
+      const response = await fetch(
+        `http://localhost:5002/api/return/delete/${record.orderId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any additional headers as needed
+          },
+        }
+      );
+
+      if (response.ok) {
+        message.success("Return record deleted successfully");
+        // Successful deletion, update the UI accordingly (e.g., refetch data)
+        const updatedReturnData = returnData.filter(
+          (item) => item.returnId !== record.returnId
+        );
+        setReturnData(updatedReturnData);
+      } else {
+        console.error("Error deleting return record:", response.statusText);
+        // Add a notification or display an error message to the user
+      }
     } catch (error) {
-      console.error("Error fetching return details:", error);
+      console.error("Error deleting return record:", error);
+      // Add a notification or display an error message to the user
     }
+  };
+
+  const handleViewDetails = (record) => {
+    setSelectedReturn(record);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedReturn(null);
   };
 
   return (
@@ -87,6 +120,33 @@ const ReturnList = () => {
                 columns={columns}
                 loading={loading}
               />
+
+              <Modal
+                title="Return Details"
+                visible={modalVisible}
+                onCancel={closeModal}
+                footer={null}
+              >
+                {selectedReturn && (
+                  <div>
+                    <p>Order ID: {selectedReturn.orderId}</p>
+                    <p>Reason: {selectedReturn.reason}</p>
+                    <p>Comments: {selectedReturn.comments}</p>
+                    <p>
+                      Order Items:
+                      <ul>
+                        {selectedReturn.orderItems.map((item) => (
+                          <li key={item.id}>
+                            Name: {item.name}, Price: {item.price}, Quantity:{" "}
+                            {item.qty}
+                          </li>
+                        ))}
+                      </ul>
+                    </p>
+                    {/* Add more details as needed */}
+                  </div>
+                )}
+              </Modal>
             </div>
           </div>
         </div>

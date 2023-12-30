@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Form, Input, Button, message, Table } from "antd";
 import NavBar from "../components/Navbar";
+import { useHistory } from "react-router-dom";
 
 const ReturnDetails = () => {
+  const history = useHistory();
+
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
+
+
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -48,6 +53,7 @@ const ReturnDetails = () => {
 
       if (data.success) {
         message.success("Return details submitted successfully");
+        history.push("/");
         // You can redirect or perform any other action upon successful submission
       } else {
         message.error("Failed to submit return details");
