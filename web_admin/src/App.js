@@ -22,6 +22,7 @@ import Marketing from "./components/pages/marketing/index";
 import Coupon from "./components/pages/coupon/coupon";
 import Return from "./components/pages/return/index";
 import Installments from "./components/pages/installments/index";
+import Stats from "./components/pages/setting/stats";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <PrivateRouter path="/coupons" component={Coupon} />
           <PrivateRouter path="/return" component={Return} />
           <PrivateRouter path="/installments" component={Installments} />
+          <PrivateRouter path="/stats" component={Stats} />
 
 
           <PrivateRouter path="*" component={NotFound} />

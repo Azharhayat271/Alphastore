@@ -146,7 +146,7 @@ router.put("/delivered/:id", async (req, res) => {
 });
 
 // Delete Order
-router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const deletedOrder = await Order.findByIdAndDelete(req.params.id);
 
@@ -169,6 +169,31 @@ router.get("/user/:id", async (req, res) => {
 
     if (orderData) {
       res.status(200).json({ success: 1, message: "", data: orderData });
+    } else {
+      res.status(200).json({ success: 0, message: "No Data Found!" });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 0, message: err.message });
+  }
+});
+
+// get api which will return the the total itemsPrice, taxPrice, and shipping price of all the orders
+router.get("/totalsales", async (req, res) => {
+  try {
+    const totalSales = await Order.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalSales: { $sum: "$totalPrice" },
+          totalTax: { $sum: "$taxPrice" },
+          totalShipping: { $sum: "$shippingPrice" },
+        },
+      },
+    ]);
+
+    if (totalSales.length > 0) {
+      // Since totalSales is an array, check if it has any elements before responding
+      res.status(200).json({ success: 1, message: "", data: totalSales[0] });
     } else {
       res.status(200).json({ success: 0, message: "No Data Found!" });
     }

@@ -19,9 +19,11 @@ const InstallmentList = () => {
         const data = await response.json();
 
         if (response.ok) {
-          console.log("Installments azhsr!", data.installment.installments.isPaid);
+          console.log(
+            "Installments azhsr!",
+            data.installment.installments.isPaid
+          );
           setInstallments(data.installment.installments);
-
         } else {
           console.error("Error fetching installments:", data.message);
         }
@@ -127,7 +129,6 @@ const InstallmentList = () => {
       dataIndex: "isPaid",
       key: "isPaid",
       render: (text) => (text ? "Paid" : "Pending"),
-
     },
     {
       title: "Action",
@@ -176,12 +177,15 @@ const InstallmentList = () => {
                   </Button>,
                 ]}
               >
-                {/* Add a form or input fields for card details */}
-                {/* For simplicity, you can use Ant Design's Input components */}
-                {/* Handle form submission in the `handlePayment` function */}
-                <Input placeholder="Card Number" />
-                <Input placeholder="Expiry Date" />
-                <Input placeholder="CVV" />
+                <div>
+                  <Input placeholder="Card Number" required className="mb-3" />
+                </div>
+                <div>
+                  <Input placeholder="Expiry Date" type="date" />
+                </div>
+                <div>
+                  <Input placeholder="CVV" className="mt-3" />
+                </div>
               </Modal>
             )}
           </>

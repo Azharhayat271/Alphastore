@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table , message }  from "antd";
+import { Table , message,Spin }  from "antd";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link } from "react-router-dom";
@@ -9,6 +9,8 @@ import {ToastObjects} from '../../../redux/actions/toastObject';
 const ProductTable = () => {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     // Fetch products when the component mounts
@@ -44,6 +46,8 @@ const ProductTable = () => {
 
   const handlePromoteClick = async (productId, Image,  productName, Description, Color, Price) => {
     try {
+      setLoading(true); // Set loading to true before starting the email sending process
+
       // Fetch emails from users
       const response = await fetch("http://localhost:5002/api/users/emails");
       const userData = await response.json();
@@ -72,6 +76,8 @@ const ProductTable = () => {
         const sendEmailData = await sendEmailResponse.json();
 
         if (sendEmailData.success === 1) {
+          setLoading(false); // Set loading to true before starting the email sending process
+
           message.success("Marketing Emails Send Sucessfully");
 
 

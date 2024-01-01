@@ -35,7 +35,8 @@ const ReturnDetails = () => {
 
   const handleReturnSubmit = async (values) => {
     try {
-      const response = await fetch("http://localhost:5002/api/return", {
+      // Step 1: Submit return details
+      const returnResponse = await fetch("http://localhost:5002/api/return", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,25 +45,42 @@ const ReturnDetails = () => {
           orderId,
           returnDetails: {
             orderItems: orderDetails.orderItems,
-            additionalData: values, // You can add any other data you need
+            additionalData: values,
           },
         }),
       });
-
-      const data = await response.json();
-
-      if (data.success) {
+  
+      const returnData = await returnResponse.json();
+  
+      if (!returnData.success) {
+        // Handle return submission failure
+        message.error("Failed to submit return details");
+        return;
+      }
+  
+      // Step 2: Delete the order
+      const deleteResponse = await fetch(
+        `http://localhost:5002/api/orders/${orderId}`,
+        {
+          method: "DELETE",
+        }
+      );
+  
+      const deleteData = await deleteResponse.json();
+  
+      if (deleteData.success) {
         message.success("Return details submitted successfully");
         history.push("/");
-        // You can redirect or perform any other action upon successful submission
+        // You can redirect or perform any other action upon successful submission and deletion
       } else {
-        message.error("Failed to submit return details");
+        message.error("Failed to delete the order");
       }
     } catch (error) {
-      console.error("Error submitting return details", error);
-      message.error("Error submitting return details");
+      console.error("Error submitting return details or deleting the order", error);
+      message.error("Error submitting return details or deleting the order");
     }
   };
+  
 
   const columns = [
     {
